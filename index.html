@@ -5,7 +5,7 @@
       <script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>      
       <script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
       <script>    var uigen = angular.module( "uiGen", ['ui.bootstrap'] );
-        uigen.controller("UiGenCtrl", [ '$scope', function($scope) {
+        uigen.controller("UiGenCtrl", [ '$scope', '$http', function($scope, $http) {
           $scope.descriptors = {
             "commands": [{
               "name": "turnLightOn",
@@ -38,6 +38,13 @@
               "value": ""
             }]
           }
+		  $http.get('status.json').success(function(response) {
+			$scope.status = response;
+			for (var i = 0; i < $scope.descriptors.outputs.length; i++) {
+				$scope.descriptors.outputs[i].value = eval("$scope.status." + $scope.descriptors.outputs[i].name);
+			}
+		  });
+
         }]);
       </script>
       <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
@@ -50,11 +57,7 @@
       <div class="panel-heading"><h2>Commands</h2></div>
       <div class="panel-body">
         <ul style="list-style-type:none">
-          <li><button type="button" class="btn btn-info">Turn light on</button></li>
-          <hr/>
-          <li><button type="button" class="btn btn-info">Turn light off</button></li>
-          <hr/>      
-          <li><button type="button" class="btn btn-info">Set temperature 28 degrees</button></li>
+		  <li ng-repeat="command in descriptors.commands"><button type="button" class="btn btn-info">{{command.label}}</button> <hr/><li>
         </ul>
       </div>
     </div>
@@ -62,9 +65,13 @@
       <div class="panel-heading"><h2>Outputs</h2></div>
       <div class="panel-body">
           <ul style="list-style-type:none">
-            <li><h3><span class="label label-warning">AC</span></h3></li>
-            <hr/>
-            <li><h3><span class="label label-warning">Light</span><span><h3></li>
+			<li ng-repeat="output in descriptors.outputs">
+				<div class="row">
+					<div class="col-md-4"><h3><span class="label label-warning">{{output.label}} :</span></h3></div>
+					<div class="col-md-6"> <h4 style="line-height: 200%; color: #8D6E63"><b>{{output.value}} :</b> </h4></div>
+				</div>
+				<hr/>
+			</li>	
           </ul>
       </div>
     </div>
