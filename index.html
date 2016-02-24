@@ -1,0 +1,74 @@
+    <html ng-app="uiGen">
+    <head>
+      <title>HelloWorld</title>
+      <script src="node_modules/angular/angular.js"></script>
+      <script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>      
+      <script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+      <script>    var uigen = angular.module( "uiGen", ['ui.bootstrap'] );
+        uigen.controller("UiGenCtrl", [ '$scope', function($scope) {
+          $scope.descriptors = {
+            "commands": [{
+              "name": "turnLightOn",
+              "label": "Turn light on"
+            },
+            {
+              "name": "turnLightOff",
+              "label": "Turn light off"
+            },
+            {
+              "name": "turnAcOff",
+              "label": "Turn ac off"
+            },
+            {
+              "name": "ac21",
+              "label": "Set AC to 21 degrees"
+            },
+            {
+              "name": "ac28",
+              "label": "Set AC to 28 degrees"
+            }],
+            "outputs": [{
+              "name": "light",
+              "label": "Light",
+              "value": ""
+            },
+            {
+              "name": "ac",
+              "label": "AC",
+              "value": ""
+            }]
+          }
+        }]);
+      </script>
+      <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    </head>
+
+    <body ng-controller="UiGenCtrl">
+      <div class="container col-md-3">
+        <h2>Generic UI for device</h2>    
+    <div class="panel panel-info">
+      <div class="panel-heading"><h2>Commands</h2></div>
+      <div class="panel-body">
+        <ul style="list-style-type:none">
+          <li><button type="button" class="btn btn-info">Turn light on</button></li>
+          <hr/>
+          <li><button type="button" class="btn btn-info">Turn light off</button></li>
+          <hr/>      
+          <li><button type="button" class="btn btn-info">Set temperature 28 degrees</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel panel-danger">
+      <div class="panel-heading"><h2>Outputs</h2></div>
+      <div class="panel-body">
+          <ul style="list-style-type:none">
+            <li><h3><span class="label label-warning">AC</span></h3></li>
+            <hr/>
+            <li><h3><span class="label label-warning">Light</span><span><h3></li>
+          </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
