@@ -2,80 +2,84 @@
     <head>
       <title>HelloWorld</title>
       <script src="node_modules/angular/angular.js"></script>
-      <script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>      
-      <script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
-      <script>    var uigen = angular.module( "uiGen", ['ui.bootstrap'] );
-        uigen.controller("UiGenCtrl", [ '$scope', '$http', function($scope, $http) {
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.1.2/ui-bootstrap-tpls.min.js"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+      <script>    
+        var uigen = angular.module( "uiGen", ['ui.bootstrap'] );
+        uigen.controller("UiGenCtrl", [ '$scope', '$http', '$interval', function($scope, $http, $interval) {
           $scope.descriptors = {
             "commands": [{
               "name": "turnLightOn",
               "label": "Turn light on"
-            },
-            {
+          },
+          {
               "name": "turnLightOff",
               "label": "Turn light off"
-            },
-            {
+          },
+          {
               "name": "turnAcOff",
               "label": "Turn ac off"
-            },
-            {
+          },
+          {
               "name": "ac21",
               "label": "Set AC to 21 degrees"
-            },
-            {
+          },
+          {
               "name": "ac28",
               "label": "Set AC to 28 degrees"
-            }],
-            "outputs": [{
+          }],
+          "outputs": [{
               "name": "light",
               "label": "Light",
               "value": ""
-            },
-            {
+          },
+          {
               "name": "ac",
               "label": "AC",
               "value": ""
-            }]
-          }
-		  $http.get('status.json').success(function(response) {
-			$scope.status = response;
-			for (var i = 0; i < $scope.descriptors.outputs.length; i++) {
-				$scope.descriptors.outputs[i].value = eval("$scope.status." + $scope.descriptors.outputs[i].name);
-			}
-		  });
+          }]
+      }
+        var checkStatus = function(){
+            $http.get('status.json').success(function(response) {
+                $scope.status = response;
+                for (var i = 0; i < $scope.descriptors.outputs.length; i++) {
+                    $scope.descriptors.outputs[i].value = eval("$scope.status." + $scope.descriptors.outputs[i].name);
+            }
+            //uncomment row above to check that this function is periodically called
+            //console.log($scope.status);
+        })
+    };
+      $interval(checkStatus, 300);      
 
-        }]);
-      </script>
-      <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-    </head>
+  }]);
+</script>
 
-    <body ng-controller="UiGenCtrl">
-      <div class="container col-md-3">
-        <h2>Generic UI for device</h2>    
+</head>
+
+<body ng-controller="UiGenCtrl">
+  <div class="container col-md-3">
+    <h2>Generic UI for device</h2>    
     <div class="panel panel-info">
-      <div class="panel-heading"><h2>Commands</h2></div>
+      <div class="panel-heading">Commands</div>
       <div class="panel-body">
-        <ul style="list-style-type:none">
-		  <li ng-repeat="command in descriptors.commands"><button type="button" class="btn btn-info">{{command.label}}</button> <hr/><li>
-        </ul>
-      </div>
-    </div>
-    <div class="panel panel-danger">
-      <div class="panel-heading"><h2>Outputs</h2></div>
-      <div class="panel-body">
-          <ul style="list-style-type:none">
-			<li ng-repeat="output in descriptors.outputs">
-				<div class="row">
-					<div class="col-md-4"><h3><span class="label label-warning">{{output.label}} :</span></h3></div>
-					<div class="col-md-6"> <h4 style="line-height: 200%; color: #8D6E63"><b>{{output.value}} :</b> </h4></div>
-				</div>
-				<hr/>
-			</li>	
-          </ul>
-      </div>
-    </div>
-  </div>
+         <div ng-repeat="command in descriptors.commands"><button type="button" class="btn btn-primary">{{command.label}}</button><hr/></div>
+     </div>
+ </div>
+ <div class="panel panel-danger">
+    <div class="panel-heading">Outputs</div>
+    <div class="panel-body">
+      <ul style="list-style-type:none">
+         <li ng-repeat="output in descriptors.outputs">
+            <div class="row">
+               <div class="col-md-4"><h3><span class="label label-warning">{{output.label}} :</span></h3></div>
+               <div class="col-md-6"> <h4 style="line-height: 200%; color: #8D6E63"><b>{{output.value}}</b> </h4></div>
+           </div>
+           <hr/>
+       </li>	
+   </ul>
+</div>
+</div>
+</div>
 </body>
 </html>
 
